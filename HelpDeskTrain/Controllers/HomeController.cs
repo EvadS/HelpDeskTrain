@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace HelpDeskTrain.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         //

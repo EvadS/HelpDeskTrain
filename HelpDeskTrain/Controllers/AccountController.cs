@@ -37,7 +37,7 @@ namespace HelpDeskTrain.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Request");
+                        return RedirectToAction("Index", "User");
                     }
                 }
                 else
@@ -64,13 +64,21 @@ namespace HelpDeskTrain.Controllers
             {
                 try
                 {
-                    User user = (from u in _db.Users
-                                 where u.Login == login && u.Password == password
-                                 select u).FirstOrDefault();
+                    //TODO: тестовый вариант
+                    var usr = (from u in _db.Users
+                              join r in _db.Roles
+                                on u.RoleId equals r.Id
+                              where u.Login == login && u.Password == password  
+                              select new { u.Login, u.Password,  r.Name}).FirstOrDefault();
 
+                    User user = (from u in _db.Users
+                                 where u.Login == login && u.Password == password                                 
+                                 select u).FirstOrDefault();                    
+                    
                     if (user != null)
                     {
                         isValid = true;
+                      
                     }
                 }
                 catch
