@@ -1,0 +1,113 @@
+﻿-- после того как база данных создана 
+-- и была открыта в обозревателе серверов 
+-- выбрать ПКМ на нужной базе и нажать 'Новый запрос'
+
+CREATE TABLE [dbo].[Categories] (
+    [Id]   INT           IDENTITY (1, 1) NOT NULL,
+    [Name] NVARCHAR (50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+--------------------------
+CREATE TABLE [dbo].Activs
+(
+	[Id] INT NOT NULL PRIMARY KEY identity,
+	[CabNumber] nvarchar(50) not null,
+	[DeparmentId] int null,
+	constraint [FK_Activs_ToDepartment] foreign key ([DeparmentId])
+	References [Departments]([Id]) ON DELETE SET NULL
+)
+--------------------------
+CREATE TABLE [dbo].[Roles] (
+    [Id]   INT           IDENTITY (1, 1) NOT NULL,
+    [Name] NVARCHAR (50) NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC)
+);
+
+-------------------------
+
+CREATE TABLE [dbo].[Users] (
+    [Id]           INT           IDENTITY (1, 1) NOT NULL,
+    [Name]         NVARCHAR (50) NULL,
+    [Login]        NVARCHAR (50) NULL,
+    [Password]     NVARCHAR (50) NULL,
+    [Position]     NVARCHAR (50) NULL,
+    [DepartmentId] INT           NULL,
+    [RoleId]       INT           NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_users_ToRoles] FOREIGN KEY ([RoleId]) REFERENCES [dbo].[Roles] ([Id]),
+    CONSTRAINT [FK_Users_ToDepartment] FOREIGN KEY ([DepartmentId]) REFERENCES [dbo].[Departments] ([Id]) ON DELETE SET NULL
+);
+
+CREATE TABLE [dbo].[Lifecycles]
+(
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [Opened] DATETIME NOT NULL, 
+    [Distributed] DATETIME NULL, 
+    [Proccesing] DATETIME NULL, 
+    [Checking] DATETIME NULL, 
+    [Closed] DATETIME NULL
+);
+-------------------------------------
+-- заявки 
+CREATE TABLE [dbo].[Requests] (
+    [Id]          INT            IDENTITY (1, 1) NOT NULL,
+    [Name]        NVARCHAR (50)  NOT NULL,
+    [Description] NVARCHAR (200) NULL,
+    [Comment]     NVARCHAR (200) NULL,
+    [Status]      INT            NOT NULL,
+    [Priority]    INT            NOT NULL,
+    [ActivId]     INT            NULL,
+    [File]        NVARCHAR (200) NULL,
+    [CategoryId]  INT            NULL,
+    [UserId]      INT            NULL,
+    [ExecutorId]  INT            NULL,
+    [LifecycleId] INT            NOT NULL,
+    PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [FK_Requests_ToCategories] FOREIGN KEY ([CategoryId]) REFERENCES [dbo].[Categories] ([Id]) ON DELETE SET NULL,
+    CONSTRAINT [FK_Requests_ToUsers] FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users] ([Id]) ON DELETE SET NULL,
+    CONSTRAINT [FK_Requests_ToLifecycles] FOREIGN KEY ([LifecycleId]) REFERENCES [dbo].[Lifecycles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_Requests_ToActivs] FOREIGN KEY ([ActivId]) REFERENCES [dbo].[Activs] ([Id]) ON DELETE SET NULL
+);
+ 
+GO
+ --так как среда нам не позволяет задать два внешних ключа на одно поле другой таблицы. Но мы --можем выйти из этой ситуации, задав триггер.
+ 
+CREATE TRIGGER [dbo].[Trigger_Requests]
+    ON [dbo].[Users] -- таблица за которой следим
+    FOR DELETE -- операция
+    AS
+    BEGIN
+       UPDATE Requests 
+	      SET ExecutorId = NULL
+        WHERE Requests.ExecutorId 
+	       IN (SELECT [Id] FROM [deleted]);
+    END
+	--deleted указывает на набор удаленных объектов из таблицы Users.
+GO
+ 
+CREATE TRIGGER [dbo].[Trigger_Requests2]
+    ON [dbo].[Users]
+    FOR UPDATE
+    AS
+    BEGIN
+        UPDATE Requests SET ExecutorId = NULL
+         WHERE Requests.ExecutorId 	 IN (
+										 SELECT [Id] 
+										 FROM [inserted]) 
+	        AND (SELECT [Name] FROM Roles WHERE Id
+			=(SELECT [RoleId] FROM [inserted])) <> 'Исполнитель';
+    END
+	
+	--------------------------------
+	
+	insert into Departments values ('ИТ')
+	
+	insert into Users (Name,Login,Password,Position,DepartmentId,RoleId)
+values ('Василий','admin','admin','Генеральный Директор',1,1)
+
+insert into Roles (Name) values ('Администратор')
+insert into Roles (Name) values ('Модератор')
+insert into Roles (Name) values ('Исполнитель')
+insert into Roles (Name) values ('Пользователь')
+
+	select * from Users
