@@ -133,6 +133,7 @@
     <Compile Include="Models\Activ.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Department.cs" />
+    <Compile Include="Models\HelpdeskContext.cs" />
     <Compile Include="Models\Lifecycle.cs" />
     <Compile Include="Models\Request.cs" />
     <Compile Include="Models\RequestPriority.cs" />
@@ -219,7 +220,9 @@
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
