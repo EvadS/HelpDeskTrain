@@ -262,6 +262,7 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Service\Departments.cshtml" />
     <Content Include="Views\Service\Activ.cshtml" />
+    <Content Include="Views\Service\Categories.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
