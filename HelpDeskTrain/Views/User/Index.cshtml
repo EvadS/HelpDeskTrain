@@ -10,6 +10,15 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+<div><form method="post" action="/User/Index">
+        <table class="tbl table">
+            <tr><td><p>Отдел: </p></td><td> @Html.DropDownList("department", ViewBag.Departments as SelectList)</td>
+            <td><p>Статус : </p></td><td> @Html.DropDownList("role",ViewBag.Roles as SelectList)</td>
+            <td><input type="submit" value="Фильтр" /> </td></tr>
+        </table>
+    </form></div>
+
 <table class="table">
     <tr>
         <th>
