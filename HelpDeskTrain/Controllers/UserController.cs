@@ -56,5 +56,47 @@ namespace HelpDeskTrain.Controllers
             return View(user);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Администратор")]
+        public ActionResult Edit(int id)
+        {
+            User user = db.Users.Find(id);
+            SelectList departments = new SelectList(db.Departments, "Id", "Name", user.DepartmentId);
+            ViewBag.Departments = departments;
+            SelectList roles = new SelectList(db.Roles, "Id", "Name", user.RoleId);
+            ViewBag.Roles = roles;
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Администратор")]
+        public ActionResult Edit(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            SelectList departments = new SelectList(db.Departments, "Id", "Name");
+            ViewBag.Departments = departments;
+            SelectList roles = new SelectList(db.Roles, "Id", "Name");
+            ViewBag.Roles = roles;
+
+            return View(user);
+        }
+
+        [Authorize(Roles = "Администратор")]
+        public ActionResult Delete(int id)
+        {
+            User user = db.Users.Find(id);
+            db.Users.Remove(user);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
