@@ -5,6 +5,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+using System.Data.Entity;
+using System.Data;
+
 namespace HelpDeskTrain.Controllers
 {
      [Authorize(Roles = "Администратор")]
@@ -39,6 +42,38 @@ namespace HelpDeskTrain.Controllers
             db.Departments.Remove(depo);
             db.SaveChanges();
             return RedirectToAction("Departments");
+        }
+
+        [HttpGet]
+        public ActionResult Activ()
+        {
+            ViewBag.Activs = db.Activs.Include(s => s.Department);
+            ViewBag.Departments = new SelectList(db.Departments, "Id", "Name");
+       
+            return View();
+        }
+
+        //Добавляем актив
+        [HttpPost]
+        public ActionResult Activ(Activ activ)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Activs.Add(activ);
+                db.SaveChanges();
+            }
+            ViewBag.Activs = db.Activs.Include(s => s.Department);
+            ViewBag.Departments = new SelectList(db.Departments, "Id", "Name");
+            return View(activ);
+        }
+
+        // Удаление актива по id
+        public ActionResult DeleteActiv(int id)
+        {
+            Activ activ = db.Activs.Find(id);
+            db.Activs.Remove(activ);
+            db.SaveChanges();
+            return RedirectToAction("Activ");
         }
 
     }

@@ -261,6 +261,7 @@
     <Content Include="Views\User\User.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Service\Departments.cshtml" />
+    <Content Include="Views\Service\Activ.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
