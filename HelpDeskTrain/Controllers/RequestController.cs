@@ -193,5 +193,48 @@ namespace HelpDeskTrain.Controllers
             return View(requests.ToList());
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Модератор")]
+        public ActionResult Distribute()
+        {
+            var requests = db.Requests.Include(r => r.User)
+                                    .Include(r => r.Lifecycle)
+                                    .Include(r => r.Executor)
+                                    .Where(r => r.ExecutorId == null)
+                                    .Where(r => r.Status != (int)RequestStatus.Closed);
+            List<User> executors = db.Users.Include(e => e.Role)
+                                        .Where(e => e.Role.Name == "Исполнитель").ToList<User>();
+
+            ViewBag.Executors = new SelectList(executors, "Id", "Name");
+            return View(requests);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Модератор")]
+        public ActionResult Distribute(int? requestId, int? executorId)
+        {
+            if (requestId == null && executorId == null)
+            {
+                return RedirectToAction("Distribute");
+            }
+            Request req = db.Requests.Find(requestId);
+            User ex = db.Users.Find(executorId);
+            if (req == null && ex == null)
+            {
+                return RedirectToAction("Distribute");
+            }
+            req.ExecutorId = executorId;
+
+            req.Status = (int)RequestStatus.Distributed;
+            Lifecycle lifecycle = db.Lifecycles.Find(req.LifecycleId);
+            lifecycle.Distributed = DateTime.Now;
+            db.Entry(lifecycle).State = EntityState.Modified;
+
+            db.Entry(req).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return RedirectToAction("Distribute");
+        }
+
     }
 }
