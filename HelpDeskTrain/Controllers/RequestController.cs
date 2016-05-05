@@ -236,5 +236,59 @@ namespace HelpDeskTrain.Controllers
             return RedirectToAction("Distribute");
         }
 
+        //Заявки для изменения статуса исполнителем
+        [HttpGet]
+        [Authorize(Roles = "Исполнитель")]
+        public ActionResult ChangeStatus()
+        {
+            // получаем текущего пользователя
+            User user = db.Users.Where(m => m.Login == HttpContext.User.Identity.Name).First();
+            if (user != null)
+            {
+                var requests = db.Requests.Include(r => r.User)
+                                    .Include(r => r.Lifecycle)
+                                    .Include(r => r.Executor)
+                                    .Where(r => r.ExecutorId == user.Id)
+                                    .Where(r => r.Status != (int)RequestStatus.Closed);
+                return View(requests);
+            }
+            return RedirectToAction("LogOff", "Account");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Исполнитель")]
+        public ActionResult ChangeStatus(int requestId, int status)
+        {
+            User user = db.Users.Where(m => m.Login == HttpContext.User.Identity.Name).First();
+            if (user == null)
+            {
+                return RedirectToAction("LogOff", "Account");
+            }
+
+            Request req = db.Requests.Find(requestId);
+            if (req != null)
+            {
+                req.Status = status;
+                Lifecycle lifecycle = db.Lifecycles.Find(req.LifecycleId);
+                if (status == (int)RequestStatus.Proccesing)
+                {
+                    lifecycle.Proccesing = DateTime.Now;
+                }
+                else if (status == (int)RequestStatus.Checking)
+                {
+                    lifecycle.Checking = DateTime.Now;
+                }
+                else if (status == (int)RequestStatus.Closed)
+                {
+                    lifecycle.Closed = DateTime.Now;
+                }
+                db.Entry(lifecycle).State = EntityState.Modified;
+                db.Entry(req).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("ChangeStatus");
+        }
+
     }
 }
