@@ -128,6 +128,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RequestController.cs" />
     <Compile Include="Controllers\ServiceController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -156,6 +157,18 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\pictures\executor.png" />
+    <Content Include="Content\pictures\info.png" />
+    <Content Include="Content\pictures\lifecycle.png" />
+    <Content Include="Content\pictures\prior1.png" />
+    <Content Include="Content\pictures\prior2.png" />
+    <Content Include="Content\pictures\prior3.png" />
+    <Content Include="Content\pictures\prior4.png" />
+    <Content Include="Content\pictures\status1.png" />
+    <Content Include="Content\pictures\status2.png" />
+    <Content Include="Content\pictures\status3.png" />
+    <Content Include="Content\pictures\status4.png" />
+    <Content Include="Content\pictures\status5.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -225,6 +238,7 @@
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\helpdesk.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
@@ -263,6 +277,11 @@
     <Content Include="Views\Service\Departments.cshtml" />
     <Content Include="Views\Service\Activ.cshtml" />
     <Content Include="Views\Service\Categories.cshtml" />
+    <Content Include="Views\Request\Create.cshtml" />
+    <Content Include="Views\Request\Index.cshtml" />
+    <Content Include="Views\Request\_Executor.cshtml" />
+    <Content Include="Views\Request\_Lifecycle.cshtml" />
+    <Content Include="Views\Request\_Details.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
