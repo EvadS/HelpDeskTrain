@@ -282,8 +282,11 @@
     <Content Include="Views\Request\_Executor.cshtml" />
     <Content Include="Views\Request\_Lifecycle.cshtml" />
     <Content Include="Views\Request\_Details.cshtml" />
+    <Content Include="Views\Request\RequestList.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Files\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

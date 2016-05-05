@@ -182,5 +182,16 @@ namespace HelpDeskTrain.Controllers
             return Content("Файл не найден");
         }
 
+        [Authorize(Roles = "Администратор")]
+        public ActionResult RequestList()
+        {
+            var requests = db.Requests.Include(r => r.Category)
+                                    .Include(r => r.Lifecycle)
+                                    .Include(r => r.User)
+                                    .OrderByDescending(r => r.Lifecycle.Opened);
+
+            return View(requests.ToList());
+        }
+
     }
 }
