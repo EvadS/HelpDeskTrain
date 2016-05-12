@@ -92,6 +92,9 @@ namespace HelpDeskTrain.Controllers
         [Authorize(Roles = "Администратор")]
         public ActionResult Create(User user)
         {
+            // TODO: добавить проверку того что логин занят 
+            //TODO: добавить - парольдолжен быть не менее 6 символов
+
             if (ModelState.IsValid)
             {
                 db.Users.Add(user);
