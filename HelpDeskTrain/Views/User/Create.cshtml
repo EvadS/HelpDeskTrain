@@ -1,69 +1,74 @@
 ﻿@model HelpDeskTrain.Models.User
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create user";
 }
 
-<h2>Создание нового пользователя</h2>
 
-@using (Html.BeginForm()) {
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)
 
     <fieldset>
-        <legend>Новый пользователь</legend>
+        <legend>Новый пользователь</legend>    
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Name)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Name)
-            @Html.ValidationMessageFor(model => model.Name)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Login)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Login)
-            @Html.ValidationMessageFor(model => model.Login)
+         <div class="form-group">
+            @Html.LabelFor(m => m.Name, new { @class = "col-md-3 control-label" })
+            <div class="col-md-8">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "введите ФИО  пользователя" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Password)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Password)
-            @Html.ValidationMessageFor(model => model.Password)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Position)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Position)
-            @Html.ValidationMessageFor(model => model.Position)
+          <div class="form-group">
+            @Html.LabelFor(m => m.Login, new { @class = "col-md-3 control-label" })
+            <div class="col-md-8">
+                @Html.TextBoxFor(m => m.Login, new { @class = "form-control", placeholder = "введите логин  пользователя" })
+                @Html.ValidationMessageFor(model => model.Login)
+            </div>
         </div>
 
-        <div class="editor-label">
-            @Html.LabelFor(model => model.DepartmentId)
-        </div>
-        <div class="editor-field">        
-            @Html.DropDownListFor(model => model.DepartmentId, ViewBag.Departments as SelectList)
-            @Html.ValidationMessageFor(model => model.DepartmentId)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.RoleId)
-        </div>
-        <div class="editor-field">
-            @Html.DropDownListFor(model => model.RoleId, ViewBag.Roles as SelectList)
-            @Html.ValidationMessageFor(model => model.RoleId)
+         <div class="form-group">
+            @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
+            <div class="col-md-8">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "пароль для  пользователя" })
+                @Html.ValidationMessageFor(model => model.Password)
+            </div>
         </div>
 
-        <p>
-            <input type="submit" class="btn" value="Create" />
-        </p>
+         <div class="form-group">
+            @Html.LabelFor(m => m.Position, new { @class = "col-md-3 control-label" })
+            <div class="col-md-8">
+                @Html.TextBoxFor(m => m.Position, new { @class = "form-control", placeholder = "должность  пользователя" })
+                @Html.ValidationMessageFor(model => model.Position)
+            </div>
+        </div>
+
+
+         <div class="form-group">
+            @Html.LabelFor(m => m.DepartmentId, new { @class = "col-md-3 control-label" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(m => m.DepartmentId,ViewBag.Departments as SelectList,new { @class = "form-control", placeholder = "должность  пользователя" })
+                @Html.ValidationMessageFor(model => model.DepartmentId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(m => m.RoleId, new { @class = "col-md-3 control-label" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(m => m.RoleId,ViewBag.Roles as SelectList,new { @class = "form-control", placeholder = "должность  пользователя" })
+                @Html.ValidationMessageFor(model => model.RoleId)
+            </div>
+        </div>
+  
+         <div class="control-group">
+		    <div class="controls">						 
+				<input name="Submit" type="submit" id="submit" value="Создать" class="btn btn-success"/>
+				<input type="reset" name="Reset"  class="btn" value="Отмена"/>
+			</div>
+		</div>  
+       
     </fieldset>
 }
 
