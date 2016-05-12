@@ -1,20 +1,18 @@
 ﻿@model IEnumerable<HelpDeskTrain.Models.User>
 
 @{
-    ViewBag.Title = "Users";
+    ViewBag.Title = "Пользователи";
 }
 
-
-
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Добавить", "Create", "User", null, new  {@class="btn btn-default" })
 </p>
 
 <div><form method="post" action="/User/Index">
         <table class="tbl table">
             <tr><td><p>Отдел: </p></td><td> @Html.DropDownList("department", ViewBag.Departments as SelectList)</td>
             <td><p>Статус : </p></td><td> @Html.DropDownList("role",ViewBag.Roles as SelectList)</td>
-            <td><input type="submit" value="Фильтр" /> </td></tr>
+            <td><input type="submit" value="отфильтровать" class="btn btn-default" /> </td></tr>
         </table>
     </form></div>
 
@@ -57,10 +55,10 @@
                 @Html.DisplayFor(modelItem => item.Position)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DepartmentId)
+                @Html.DisplayFor(modelItem => item.Department.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RoleId)
+                @Html.DisplayFor(modelItem => item.Role.Name)
             </td>
             @if (HttpContext.Current.User.IsInRole("Администратор"))
             {
@@ -73,3 +71,8 @@
     }
 
 </table>
+
+@section Footer
+{
+    <p>Evad.se corp 2016</p>
+}
